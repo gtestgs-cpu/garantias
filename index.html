@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reclamación de garantía · Grupo Solarever</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<style>
+  /* Marca Solarever: Azul #004A81 · Blanco #FFFFFC · Avenir Next (Nunito Sans como respaldo web) */
+  :root{
+    --azul:#004A81; --azul-osc:#003660; --azul-suave:#e8f0f7; --azul-linea:#b9cde0;
+    --tinta:#1b2733; --gris:#5b6672; --linea:#d9dfe6; --fondo:#f3f6f9; --blanco:#FFFFFC;
+    --error:#c0392b; --error-bg:#fdf3f2; --ok:#1e7d32; --radio:12px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--fondo);color:var(--tinta);
+    font:16px/1.5 "Avenir Next","Avenir","Nunito Sans",-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+  header{background:var(--azul);color:#fff;padding:22px 16px 22px}
+  header .wrap{max-width:820px;margin:0 auto;display:flex;gap:22px;align-items:center}
+  header .logo{width:118px;height:auto;flex:none}
+  header .txt{border-left:1px solid rgba(255,255,255,.28);padding-left:22px}
+  header small{opacity:.8;letter-spacing:.08em;text-transform:uppercase;font-size:12px;font-weight:600}
+  header h1{margin:4px 0 6px;font-size:23px;line-height:1.2;font-weight:800;letter-spacing:.005em}
+  header p{margin:0;opacity:.9;font-size:14px}
+  @media (max-width:620px){
+    header .wrap{flex-direction:column;align-items:flex-start;gap:14px}
+    header .logo{width:104px}
+    header .txt{border-left:0;padding-left:0;border-top:1px solid rgba(255,255,255,.28);padding-top:14px}
+    header h1{font-size:20px}
+  }
+  main{max-width:820px;margin:0 auto;padding:18px 16px 120px}
+  .card{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);margin:0 0 16px;overflow:hidden;
+    box-shadow:0 1px 2px rgba(0,40,80,.04)}
+  .card>h2{margin:0;padding:13px 16px;font-size:15px;background:var(--azul);color:#fff;letter-spacing:.02em;font-weight:700}
+  .card>.cuerpo{padding:16px}
+  .nota{font-size:13px;color:var(--gris);margin:0 0 12px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+  .grid .full{grid-column:1/-1}
+  @media (max-width:620px){.grid{grid-template-columns:1fr}}
+  label.campo{display:block;font-size:13px;font-weight:700;color:#2c3a47}
+  label.campo .req{color:var(--azul)}
+  label.campo .opc{font-weight:400;color:var(--gris)}
+  input[type=text],input[type=email],input[type=tel],input[type=date],select,textarea{
+    width:100%;margin-top:5px;padding:11px 12px;font:inherit;font-size:16px;color:inherit;
+    border:1px solid #c3ccd6;border-radius:9px;background:#fff;outline:none}
+  textarea{min-height:120px;resize:vertical}
+  ::placeholder{font-weight:400;color:#8a96a3;opacity:1}
+  input:focus,select:focus,textarea:focus{border-color:var(--azul);box-shadow:0 0 0 3px rgba(0,74,129,.15)}
+  .invalido{border-color:var(--error)!important;background:var(--error-bg)!important}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .chips label{display:flex;align-items:center;gap:8px;padding:9px 13px;border:1px solid #c3ccd6;border-radius:999px;
+    cursor:pointer;font-size:14px;background:#fff;user-select:none}
+  .chips input{accent-color:var(--azul);margin:0}
+  .chips label:has(input:checked){border-color:var(--azul);background:var(--azul-suave);color:var(--azul-osc);font-weight:700}
+  .chips.bloque label{border-radius:10px;width:100%}
+  .equipo{border:1px dashed var(--azul-linea);border-radius:10px;padding:12px;margin:0 0 12px;position:relative;background:#fbfdff}
+  .equipo h3{margin:0 0 10px;font-size:14px;color:var(--azul);font-weight:800}
+  .equipo .quitar{position:absolute;top:8px;right:8px;border:0;background:none;color:var(--gris);font-size:13px;
+    cursor:pointer;padding:6px 8px;border-radius:6px;font-family:inherit}
+  .equipo .quitar:hover{background:#eef2f6;color:var(--error)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:10px;
+    padding:12px 20px;font:inherit;font-weight:700;cursor:pointer}
+  .btn.prim{background:var(--azul);color:#fff}
+  .btn.prim:hover{background:var(--azul-osc)}
+  .btn.sec{background:#fff;color:var(--azul);border:1px solid var(--azul)}
+  .btn.sec:hover{background:var(--azul-suave)}
+  .btn:disabled{opacity:.55;cursor:wait}
+  details.card>summary{list-style:none;cursor:pointer;padding:13px 16px;font-size:15px;font-weight:700;
+    background:var(--azul-suave);color:var(--azul);display:flex;justify-content:space-between;align-items:center;gap:10px;
+    border-bottom:1px solid var(--azul-linea)}
+  details.card>summary::-webkit-details-marker{display:none}
+  details.card>summary::after{content:"Mostrar ▾";font-weight:600;font-size:13px;white-space:nowrap}
+  details[open].card>summary::after{content:"Ocultar ▴"}
+  .barra{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--linea);padding:12px 16px;
+    box-shadow:0 -4px 16px rgba(0,40,80,.07);z-index:5}
+  .barra .wrap{max-width:820px;margin:0 auto;display:flex;gap:12px;align-items:center;justify-content:space-between}
+  .barra .info{font-size:13px;color:var(--gris)}
+  .errores{display:none;background:var(--error-bg);border:1px solid #efc2bd;color:#8f2a20;border-radius:10px;padding:12px 14px;
+    margin:0 0 16px;font-size:14px}
+  .oculto{position:absolute!important;left:-9999px!important;width:1px;height:1px;overflow:hidden}
+  .modal{position:fixed;inset:0;background:rgba(10,25,40,.55);display:none;align-items:flex-end;justify-content:center;z-index:10}
+  .modal.abierto{display:flex}
+  .modal .caja{background:#fff;width:100%;max-width:640px;max-height:88vh;overflow:auto;border-radius:16px 16px 0 0;padding:20px}
+  @media (min-width:700px){.modal{align-items:center}.modal .caja{border-radius:16px}}
+  .modal h3{margin:0 0 6px;color:var(--azul);font-weight:800}
+  .resumen{font-size:14px;border:1px solid var(--linea);border-radius:10px;padding:10px 12px;margin:12px 0;background:#f8fafc}
+  .resumen dt{font-weight:700;color:#2c3a47;margin-top:6px}
+  .resumen dd{margin:0;color:#1b2733;white-space:pre-wrap;word-break:break-word}
+  .aviso{background:var(--azul-suave);border:1px solid var(--azul-linea);color:var(--azul-osc);border-radius:10px;padding:10px 12px;font-size:14px;margin:8px 0 14px}
+  .acciones{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+  .exito{display:none;text-align:center;background:#fff;border:1px solid var(--linea);border-radius:var(--radio);padding:30px 18px}
+  .exito h2{color:var(--azul);font-weight:800}
+  .exito .folio{font-size:30px;font-weight:800;color:var(--azul);letter-spacing:.04em;margin:8px 0 4px}
+  .exito .check{width:56px;height:56px;border-radius:50%;background:var(--azul-suave);color:var(--azul);display:grid;place-items:center;
+    margin:0 auto 10px;font-size:30px;font-weight:800}
+  .cargando{padding:40px;text-align:center;color:var(--gris)}
+  footer.marca{text-align:center;color:var(--gris);font-size:12px;padding:6px 16px 0}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <img class="logo" alt="Solarever · Quality is our life" src="data:image/png;base64,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">
+    <div class="txt">
+      <small>Soporte Técnico · GS-ST-RG-01</small>
+      <h1>Formulario de reclamación de garantía de equipos fotovoltaicos</h1>
+      <p>Para efectuar su reclamación en el menor tiempo posible, proporcione correctamente la información solicitada. Los campos marcados con <b>*</b> son obligatorios.</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div id="cargando" class="cargando">Cargando formulario…</div>
+  <div id="errores" class="errores" role="alert"></div>
+
+  <form id="f" novalidate style="display:none">
+    <input type="text" name="_web" class="oculto" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+    <section class="card">
+      <h2>Coordinador de Soporte Técnico</h2>
+      <div class="cuerpo">
+        <p class="nota">Si su caso ya es atendido por un coordinador, selecciónelo. De lo contrario, el Departamento de Soporte Técnico le asignará uno.</p>
+        <label class="campo">Coordinador <span class="opc">(opcional)</span>
+          <select name="coordinadorCliente" id="coordinadorCliente"><option value="">Asignación por Soporte Técnico</option></select>
+        </label>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>1. Datos del solicitante</h2>
+      <div class="cuerpo grid">
+        <label class="campo full">Nombre del cliente o compañía <span class="req">*</span>
+          <input type="text" name="cliente" required autocomplete="organization"></label>
+        <label class="campo">Localidad <span class="req">*</span>
+          <input type="text" name="localidad" required placeholder="Ciudad, Estado"></label>
+        <label class="campo">CP <span class="req">*</span>
+          <input type="text" name="cp" required inputmode="numeric" maxlength="5" pattern="\d{5}" autocomplete="postal-code"></label>
+        <label class="campo">Nombre <span class="req">*</span>
+          <input type="text" name="nombre" required autocomplete="name"></label>
+        <label class="campo">Cargo <span class="opc">(opcional)</span>
+          <input type="text" name="cargo" autocomplete="organization-title"></label>
+        <label class="campo">Teléfono <span class="req">*</span>
+          <input type="tel" name="telefono" required inputmode="tel" autocomplete="tel"></label>
+        <label class="campo">Correo <span class="req">*</span>
+          <input type="email" name="correo" required autocomplete="email"></label>
+        <label class="campo full">Asesor de ventas <span class="req">*</span>
+          <input type="text" name="asesor" id="asesor" required list="listaAsesores" placeholder="Nombre de su asesor de ventas Solarever">
+          <datalist id="listaAsesores"></datalist></label>
+        <div class="full">
+          <label class="campo">Centro de distribución (salida del producto) <span class="req">*</span></label>
+          <div class="chips" id="centrosSalida" data-name="centroSalida"></div>
+        </div>
+        <div class="full">
+          <label class="campo">Centro de distribución (revisión del producto) <span class="opc">(opcional)</span></label>
+          <div class="chips bloque" id="centrosRevision" data-name="centroRevision"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2. Equipos objeto de reclamación</h2>
+      <div class="cuerpo">
+        <p class="nota">Cada solicitud es para <b>una misma marca y modelo</b>. Si tiene equipos de otro modelo, envíe otra solicitud.</p>
+        <div class="grid" style="margin-bottom:14px">
+          <label class="campo">Marca <span class="req">*</span>
+            <input type="text" name="marca" required placeholder="Ej. SOLAREVER"></label>
+          <label class="campo">Modelo <span class="req">*</span>
+            <input type="text" name="modelo" required placeholder="Ej. SE1-SPT-6K"></label>
+        </div>
+        <div id="equipos"></div>
+        <button type="button" class="btn sec" id="agregar">+ Agregar otro equipo</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>3. Motivo de la reclamación</h2>
+      <div class="cuerpo">
+        <label class="campo">Describa la falla y/o inconformidad <span class="req">*</span>
+          <textarea name="motivo" required placeholder="¿Qué falla presenta el equipo? ¿Desde cuándo? ¿Muestra algún código de error?"></textarea></label>
+        <p class="nota" style="margin-top:8px">La evidencia fotográfica se envía por correo a su asesor de ventas o al Departamento de Soporte Técnico.</p>
+      </div>
+    </section>
+
+    <details class="card">
+      <summary>4. Información del sistema fotovoltaico (opcional)</summary>
+      <div class="cuerpo grid">
+        <p class="nota full">Esta información nos ayuda a diagnosticar más rápido. Llene lo que conozca.</p>
+        <label class="campo full">Marca y modelo del módulo fotovoltaico empleado en su sistema
+          <input type="text" name="s4Modulo"></label>
+        <label class="campo">Potencia del módulo<input type="text" name="s4Potencia" placeholder="Ej. 550 W"></label>
+        <div class="grid" style="grid-template-columns:1fr 1fr;gap:12px">
+          <label class="campo">Voc<input type="text" name="s4Voc" placeholder="V"></label>
+          <label class="campo">Isc<input type="text" name="s4Isc" placeholder="A"></label>
+        </div>
+        <label class="campo">Tipo de instalación
+          <select name="s4Tipo"><option value=""></option>
+            <option>Terreno comercial</option><option>Techo comercial</option><option>Techo residencial</option>
+            <option>Propietario/Operador del sistema</option><option>Distribuidor</option><option>Instalador</option>
+          </select></label>
+        <label class="campo">Fecha de instalación<input type="date" name="s4FechaInst"></label>
+        <label class="campo">Código Postal del sitio de instalación<input type="text" name="s4Cp" inputmode="numeric" maxlength="5"></label>
+        <label class="campo">El sistema es
+          <select name="s4Interconectado"><option value=""></option><option>Interconectado</option><option>Aislado</option></select></label>
+        <label class="campo">¿El sistema se encuentra en operación?
+          <select name="s4Operacion"><option value=""></option><option>Sí</option><option>No</option></select></label>
+        <label class="campo">Número de strings conectados al inversor<input type="text" name="s4Strings" inputmode="numeric"></label>
+        <label class="campo full">Marca y modelo del interruptor termomagnético o fusible en corriente directa<input type="text" name="s4ItmDc"></label>
+        <label class="campo full">Marca y modelo del supresor de picos de voltaje en corriente directa<input type="text" name="s4SpdDc"></label>
+        <label class="campo full">Marca y modelo del interruptor termomagnético en corriente alterna<input type="text" name="s4ItmAc"></label>
+        <label class="campo full">Marca y modelo del supresor de picos de voltaje en corriente alterna<input type="text" name="s4SpdAc"></label>
+        <label class="campo">Voltaje suministrado por la(s) cadena(s) de módulos al inversor<input type="text" name="s4VStrings"></label>
+        <label class="campo">Número de fases y voltaje suministrado por la red al inversor<input type="text" name="s4Fases"></label>
+        <label class="campo full">¿El inversor, estructura y marcos de los módulos han sido aterrizados?
+          <select name="s4Tierra"><option value=""></option><option>Sí</option><option>No</option><option>No sé</option></select></label>
+      </div>
+    </details>
+
+    <details class="card retorno" open>
+      <summary>Datos de retorno del equipo (en caso de reemplazo o reparación)</summary>
+      <div class="cuerpo grid">
+        <p class="nota full">¿A dónde enviamos el equipo de reemplazo o reparado? Estos datos solo los ve Soporte Técnico.</p>
+        <label class="campo">Nombre de quien recibe<input type="text" name="retNombre" autocomplete="shipping name"></label>
+        <label class="campo">Número telefónico<input type="tel" name="retTelefono" inputmode="tel"></label>
+        <label class="campo full">Dirección (con cruzamientos)
+          <input type="text" name="retDireccion" placeholder="Calle, número, entre calle X y calle Y" autocomplete="shipping address-line1"></label>
+        <label class="campo">Colonia<input type="text" name="retColonia"></label>
+        <label class="campo">Municipio<input type="text" name="retMunicipio"></label>
+        <label class="campo">Estado<input type="text" name="retEstado"></label>
+        <label class="campo">Código Postal<input type="text" name="retCp" inputmode="numeric" maxlength="5" autocomplete="shipping postal-code"></label>
+        <label class="campo">Uso de CFDI
+          <select name="retCfdi"><option value=""></option>
+            <option>G01 - Adquisición de mercancías</option>
+            <option>G02 - Devoluciones, descuentos o bonificaciones</option>
+            <option>G03 - Gastos en general</option>
+            <option>I01 - Construcciones</option>
+            <option>I02 - Mobiliario y equipo de oficina por inversiones</option>
+            <option>I04 - Equipo de cómputo y accesorios</option>
+            <option>I08 - Otra maquinaria y equipo</option>
+            <option>S01 - Sin efectos fiscales</option>
+          </select></label>
+        <label class="campo">Asesor de ventas<input type="text" name="retAsesor" id="retAsesor" list="listaAsesores"></label>
+      </div>
+    </details>
+  </form>
+
+  <div id="exito" class="exito">
+    <div class="check">✓</div>
+    <h2 style="margin:0">¡Solicitud enviada!</h2>
+    <p style="margin:6px 0 0;color:#5f6368">Su número de folio es:</p>
+    <div class="folio" id="folio"></div>
+    <p style="font-size:14px;color:#5f6368;max-width:480px;margin:10px auto 0">Guarde este folio para cualquier seguimiento. Recuerde enviar la evidencia fotográfica por correo a su asesor de ventas o al Departamento de Soporte Técnico, mencionando el folio.</p>
+  </div>
+</main>
+
+<div class="barra" id="barra" style="display:none">
+  <div class="wrap">
+    <span class="info" id="infoEquipos">1 equipo</span>
+    <button type="button" class="btn prim" id="revisar">Revisar y enviar</button>
+  </div>
+</div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="tituloModal">
+  <div class="caja">
+    <h3 id="tituloModal">Confirme su solicitud</h3>
+    <div class="aviso"><b>Importante:</b> una vez enviada, la solicitud <b>no podrá modificarse</b>. Revise que los datos sean correctos.</div>
+    <dl class="resumen" id="resumen"></dl>
+    <div class="acciones">
+      <button type="button" class="btn sec" id="corregir">Corregir</button>
+      <button type="button" class="btn prim" id="enviar">Enviar solicitud</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== Conexión con Apps Script (sin usar la sesión de Google del navegador) =====
+   Si algún día cambia la URL de la implementación de clientes, cámbiala aquí: */
+var API_URL = 'https://script.google.com/macros/s/AKfycbxP1YCNN_bguTSpD5TMyEoT4T4trKJmfVEfYJ-36ICfTAdNoYQjegLBDtHuXO9aCsEX/exec';
+window.google = { script: { run: (function () {
+  function R(ok, ko) { this.ok = ok; this.ko = ko; }
+  R.prototype.withSuccessHandler = function (f) { return new R(f, this.ko); };
+  R.prototype.withFailureHandler = function (f) { return new R(this.ok, f); };
+  function llamar(r, accion, datos) {
+    fetch(API_URL, { method: 'POST', credentials: 'omit', redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ accion: accion, datos: datos }) })
+      .then(function (x) { return x.json(); })
+      .then(function (j) { if (j.ok) { r.ok && r.ok(j.data); } else { r.ko && r.ko(new Error(j.error)); } })
+      .catch(function () { r.ko && r.ko(new Error('No hay conexión con el servidor. Revise su internet e intente de nuevo')); });
+  }
+  R.prototype.obtenerConfigFormulario = function () { llamar(this, 'config'); };
+  R.prototype.enviarSolicitud = function (d) { llamar(this, 'enviar', d); };
+  return new R();
+})() } };
+</script>
+<script>
+(function(){
+  var $ = function(s,c){return (c||document).querySelector(s)};
+  var $$ = function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
+  var form = $('#f'), cont = $('#equipos');
+  var CLAVE_BORRADOR = 'solarever_garantia_borrador_v1';
+
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+
+  function chips(id, opciones, tipo){
+    var box = $('#'+id), name = box.dataset.name;
+    box.innerHTML = opciones.map(function(o){
+      return '<label><input type="radio" name="'+name+'" value="'+esc(o)+'"> '+esc(o)+'</label>';
+    }).join('');
+  }
+
+  function plantillaEquipo(n, d){
+    d = d || {};
+    return '<div class="equipo" data-i="'+n+'">'+
+      '<h3>Equipo '+n+'</h3>'+
+      (n>1?'<button type="button" class="quitar" aria-label="Quitar equipo '+n+'">✕ Quitar</button>':'')+
+      '<div class="grid">'+
+        '<label class="campo full">Número de serie <span class="req">*</span><input type="text" data-k="ns" required value="'+esc(d.ns)+'" autocapitalize="characters"></label>'+
+        '<label class="campo">Número de factura <span class="req">*</span><input type="text" data-k="factura" required value="'+esc(d.factura)+'" autocapitalize="characters"></label>'+
+        '<label class="campo">Fecha de compra<input type="date" data-k="fechaCompra" value="'+esc(d.fechaCompra)+'"></label>'+
+      '</div></div>';
+  }
+  function leerEquipos(){
+    return $$('.equipo', cont).map(function(el){
+      var o={}; $$('[data-k]', el).forEach(function(i){o[i.dataset.k]=i.value.trim()}); return o;
+    });
+  }
+  function pintarEquipos(lista){
+    cont.innerHTML = lista.map(function(d,i){return plantillaEquipo(i+1,d)}).join('');
+    var n = lista.length;
+    $('#infoEquipos').textContent = n + (n===1?' equipo':' equipos');
+  }
+  function agregar(){
+    var l = leerEquipos(), ult = l[l.length-1] || {};
+    l.push({factura: ult.factura || '', fechaCompra: ult.fechaCompra || ''});
+    pintarEquipos(l);
+    var nuevos = $$('.equipo', cont); $('[data-k=ns]', nuevos[nuevos.length-1]).focus();
+    guardarBorrador();
+  }
+  cont.addEventListener('click', function(e){
+    if(!e.target.classList.contains('quitar')) return;
+    var i = Number(e.target.closest('.equipo').dataset.i)-1;
+    var l = leerEquipos(); l.splice(i,1); pintarEquipos(l); guardarBorrador();
+  });
+  $('#agregar').addEventListener('click', agregar);
+
+  function datos(){
+    var o = {};
+    $$('input[name],select[name],textarea[name]', form).forEach(function(el){
+      if(el.type==='radio'){ if(el.checked) o[el.name]=el.value; else if(!(el.name in o)) o[el.name]=''; }
+      else o[el.name] = el.value.trim();
+    });
+    o.equipos = leerEquipos();
+    return o;
+  }
+
+  // Asesor del punto 1 → retorno (si está vacío)
+  $('#asesor').addEventListener('change', function(){
+    var r = $('#retAsesor'); if(!r.value) r.value = this.value;
+  });
+
+  // Borrador local (por si se cierra la página antes de enviar)
+  function guardarBorrador(){
+    try{ var d = datos(); delete d._web; localStorage.setItem(CLAVE_BORRADOR, JSON.stringify(d)); }catch(e){}
+  }
+  function cargarBorrador(){
+    var d; try{ d = JSON.parse(localStorage.getItem(CLAVE_BORRADOR)||'null'); }catch(e){ d=null; }
+    if(!d){ pintarEquipos([{}]); return; }
+    Object.keys(d).forEach(function(k){
+      if(k==='equipos') return;
+      $$('[name="'+k+'"]', form).forEach(function(el){
+        if(el.type==='radio') el.checked = (el.value===d[k]); else el.value = d[k]||'';
+      });
+    });
+    pintarEquipos(d.equipos && d.equipos.length ? d.equipos : [{}]);
+  }
+  function borrarBorrador(){ try{ localStorage.removeItem(CLAVE_BORRADOR); }catch(e){} }
+  form.addEventListener('input', guardarBorrador);
+  form.addEventListener('change', guardarBorrador);
+
+  function validar(){
+    var errs = [];
+    $$('.invalido', form).forEach(function(el){el.classList.remove('invalido')});
+    $$('[required]', form).forEach(function(el){
+      if(!el.value.trim()){
+        el.classList.add('invalido');
+        var lab = el.closest('label'); var t = lab ? lab.childNodes[0].textContent.trim() : el.name;
+        var eq = el.closest('.equipo'); if(eq) t += ' (Equipo '+eq.dataset.i+')';
+        errs.push(t);
+      }
+    });
+    var correo = form.correo.value.trim();
+    if(correo && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)){ form.correo.classList.add('invalido'); errs.push('Correo con formato válido'); }
+    if(!form.querySelector('input[name=centroSalida]:checked')){
+      $('#centrosSalida').querySelectorAll('label').forEach(function(l){l.classList.add('invalido')});
+      errs.push('Centro de distribución (salida)');
+    } else { $$('#centrosSalida label').forEach(function(l){l.classList.remove('invalido')}); }
+    var ns = leerEquipos().map(function(e){return e.ns.toUpperCase()}).filter(String);
+    var dup = ns.filter(function(v,i){return ns.indexOf(v)!==i});
+    if(dup.length) errs.push('Números de serie repetidos: '+dup.join(', '));
+    var box = $('#errores');
+    if(errs.length){
+      box.innerHTML = '<b>Revise los siguientes campos:</b><br>'+errs.map(esc).join(' · ');
+      box.style.display='block';
+      var primero = $('.invalido', form) || box; primero.scrollIntoView({behavior:'smooth',block:'center'});
+      if(primero.focus) try{primero.focus({preventScroll:true})}catch(e){}
+      return false;
+    }
+    box.style.display='none'; return true;
+  }
+
+  function resumen(d){
+    var filas = [
+      ['Coordinador', d.coordinadorCliente || 'Asignación por Soporte Técnico'],
+      ['Cliente / compañía', d.cliente], ['Contacto', d.nombre + (d.cargo?' · '+d.cargo:'')],
+      ['Teléfono / correo', d.telefono+' · '+d.correo], ['Localidad', d.localidad+' · CP '+d.cp],
+      ['Asesor de ventas', d.asesor], ['Centro de salida', d.centroSalida],
+      ['Equipos', d.marca+' '+d.modelo+' — '+d.equipos.length+(d.equipos.length===1?' equipo':' equipos')+'\n'+
+        d.equipos.map(function(e,i){return (i+1)+'. NS '+e.ns+' · Factura '+e.factura}).join('\n')],
+      ['Motivo', d.motivo]
+    ];
+    if(d.retNombre||d.retDireccion) filas.push(['Envío de retorno', [d.retNombre,d.retDireccion,d.retColonia,d.retMunicipio,d.retEstado,d.retCp].filter(String).join(', ')]);
+    return filas.map(function(f){return '<dt>'+esc(f[0])+'</dt><dd>'+esc(f[1])+'</dd>'}).join('');
+  }
+
+  var modal = $('#modal');
+  $('#revisar').addEventListener('click', function(){
+    if(!validar()) return;
+    $('#resumen').innerHTML = resumen(datos());
+    modal.classList.add('abierto');
+  });
+  $('#corregir').addEventListener('click', function(){ modal.classList.remove('abierto') });
+
+  var enviando = false;
+  $('#enviar').addEventListener('click', function(){
+    if(enviando) return; enviando = true;
+    var b = this; b.disabled = true; b.textContent = 'Enviando…';
+    google.script.run
+      .withSuccessHandler(function(r){
+        borrarBorrador();
+        modal.classList.remove('abierto');
+        form.style.display='none'; $('#barra').style.display='none'; $('#errores').style.display='none';
+        $('#folio').textContent = r.folio; $('#exito').style.display='block';
+        window.scrollTo(0,0);
+      })
+      .withFailureHandler(function(err){
+        enviando = false; b.disabled = false; b.textContent = 'Enviar solicitud';
+        modal.classList.remove('abierto');
+        var box = $('#errores'); box.textContent = 'No se pudo enviar: '+(err && err.message ? err.message : err)+'. Intente de nuevo.';
+        box.style.display='block'; box.scrollIntoView({behavior:'smooth'});
+      })
+      .enviarSolicitud(datos());
+  });
+
+  google.script.run
+    .withSuccessHandler(function(cfg){
+      var sel = $('#coordinadorCliente');
+      cfg.coordinadores.forEach(function(c){ var o=document.createElement('option'); o.textContent=c; sel.appendChild(o); });
+      $('#listaAsesores').innerHTML = cfg.asesores.map(function(a){return '<option value="'+esc(a)+'">'}).join('');
+      chips('centrosSalida', cfg.centrosSalida);
+      chips('centrosRevision', cfg.centrosRevision);
+      cargarBorrador();
+      $('#cargando').style.display='none'; form.style.display='block'; $('#barra').style.display='block';
+    })
+    .withFailureHandler(function(err){
+      $('#cargando').textContent = 'No se pudo cargar el formulario. Recargue la página. ('+(err&&err.message||err)+')';
+    })
+    .obtenerConfigFormulario();
+})();
+</script>
+</body>
+</html>
