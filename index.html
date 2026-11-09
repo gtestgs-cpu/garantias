@@ -170,6 +170,7 @@
           <label class="campo">Modelo <span class="req">*</span>
             <input type="text" name="modelo" required placeholder="Ej. SE1-SPT-6K"></label>
         </div>
+        <p class="nota">Copie el <b>número de serie</b> tal como aparece en la etiqueta del equipo. Fíjese bien en la letra <b>O</b> y el número <b>0</b> (cero), y en la <b>I</b> y el <b>1</b>.</p>
         <div id="equipos"></div>
         <button type="button" class="btn sec" id="agregar">+ Agregar otro equipo</button>
       </div>
@@ -180,7 +181,7 @@
       <div class="cuerpo">
         <label class="campo">Describa la falla y/o inconformidad <span class="req">*</span>
           <textarea name="motivo" required placeholder="¿Qué falla presenta el equipo? ¿Desde cuándo? ¿Muestra algún código de error?"></textarea></label>
-        <p class="nota" style="margin-top:8px">La evidencia fotográfica se envía por correo a su asesor de ventas o al Departamento de Soporte Técnico.</p>
+        <p class="nota" style="margin-top:8px">La evidencia en video o fotográfica y la factura de compra se envían a su Coordinador de Soporte Técnico, mencionando su folio.</p>
       </div>
     </section>
 
@@ -251,7 +252,15 @@
     <h2 style="margin:0">¡Solicitud enviada!</h2>
     <p style="margin:6px 0 0;color:#5f6368">Su número de folio es:</p>
     <div class="folio" id="folio"></div>
-    <p style="font-size:14px;color:#5f6368;max-width:480px;margin:10px auto 0">Guarde este folio para cualquier seguimiento. Recuerde enviar la evidencia fotográfica por correo a su asesor de ventas o al Departamento de Soporte Técnico, mencionando el folio.</p>
+    <p style="font-size:14px;color:#5f6368;max-width:480px;margin:10px auto 0">Guarde este folio para cualquier seguimiento.</p>
+    <div style="font-size:14px;color:#3c4043;max-width:480px;margin:14px auto 0;text-align:left">
+      <p style="margin:0 0 6px">Para continuar con su reclamación, envíe <span id="aQuien">al Coordinador de Soporte Técnico que le compartió este formulario</span>, mencionando su folio:</p>
+      <ul style="margin:0 0 10px;padding-left:20px">
+        <li>La <b>evidencia en video o fotográfica</b> de los equipos.</li>
+        <li>La <b>factura de compra</b> de los equipos.</li>
+      </ul>
+      <p style="margin:0;padding:10px 12px;border-radius:10px;background:#fff4e0;color:#7a4a00"><b>Importante:</b> sin la factura, el proceso de garantía no podrá avanzar.</p>
+    </div>
   </div>
 </main>
 
@@ -437,12 +446,16 @@ window.google = { script: { run: (function () {
   $('#enviar').addEventListener('click', function(){
     if(enviando) return; enviando = true;
     var b = this; b.disabled = true; b.textContent = 'Enviando…';
+    var coordElegido = ($('#coordinadorCliente') || {}).value || '';
     google.script.run
       .withSuccessHandler(function(r){
         borrarBorrador();
         modal.classList.remove('abierto');
         form.style.display='none'; $('#barra').style.display='none'; $('#errores').style.display='none';
         $('#folio').textContent = r.folio; $('#exito').style.display='block';
+        $('#aQuien').innerHTML = coordElegido
+          ? 'a su Coordinador de Soporte Técnico asignado, <b>' + esc(coordElegido) + '</b>'
+          : 'al Coordinador de Soporte Técnico que le compartió este formulario';
         window.scrollTo(0,0);
       })
       .withFailureHandler(function(err){
